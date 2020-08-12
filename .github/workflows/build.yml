@@ -1,0 +1,24 @@
+name: LibreELEC CI
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - uses: actions/cache@v2.1.0
+      with:
+        path: ./sources/
+        key: ${{ runner.os }}-sources-${{ hashFiles('./sources/**/*.sha256') }}
+    - name: make_rpi_debug
+      env:
+        PROJECT: RPi
+        DEVICE: RPi
+        ARCH: arm
+        DEBUG: yes
+      run: make image
